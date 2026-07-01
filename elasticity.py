@@ -81,10 +81,11 @@ def main():
         print(f"{product_name:<20} {true_val:>8} {result['estimated_elasticity']:>12} {result['r_squared']:>8}")
 
         results.append({
-            "product": product_name,
-            "true_elasticity": true_val,
-            **result,
-        })
+    "product": product_name,
+    "category": df_product["category"].iloc[0],
+    "true_elasticity": true_val,
+    **result,
+})
 
     results_df = pd.DataFrame(results)
     out_path = Path(__file__).resolve().parent / "data" / "elasticity_results.csv"
