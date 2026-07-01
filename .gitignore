@@ -1,0 +1,16 @@
+# Virtual environment - never push this
+venv/
+
+# API keys and secrets - NEVER push this
+.env
+
+# Generated data files - too large for GitHub
+data/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code settings
+.vscode/
