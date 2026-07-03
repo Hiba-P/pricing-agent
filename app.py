@@ -11,11 +11,37 @@ Three sections:
 import streamlit as st
 import pandas as pd
 import numpy as np
+import plotly.express as px
 from pathlib import Path
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
+
+# ── Auto-initialize data if missing ───────────────────────────────────────────
+def initialize_data():
+    """
+    Regenerates synthetic data and elasticity results if CSV files are missing.
+    This makes the app self-contained — no manual setup needed on any machine.
+    """
+    data_dir = Path(__file__).resolve().parent / "data"
+    sales_path = data_dir / "sales_data.csv"
+    elasticity_path = data_dir / "elasticity_results.csv"
+
+    if not sales_path.exists() or not elasticity_path.exists():
+        import subprocess
+        import sys
+        with st.spinner("Initializing data for first run..."):
+            subprocess.run(
+                [sys.executable, "data_generator.py"],
+                check=True
+            )
+            subprocess.run(
+                [sys.executable, "elasticity.py"],
+                check=True
+            )
+
+initialize_data()
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -59,7 +85,6 @@ st.markdown(
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    import plotly.express as px
     chart_df = elasticity_df.sort_values("estimated_elasticity")
     fig = px.bar(
         chart_df,
