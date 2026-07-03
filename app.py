@@ -59,12 +59,25 @@ st.markdown(
 col1, col2 = st.columns([2, 1])
 
 with col1:
+    import plotly.express as px
     chart_df = elasticity_df.sort_values("estimated_elasticity")
-    st.bar_chart(
-        chart_df.set_index("product")["estimated_elasticity"],
-        color="#636EFA",
+    fig = px.bar(
+        chart_df,
+        x="estimated_elasticity",
+        y="product",
+        orientation="h",
+        color="category",
+        color_discrete_map={"Electronics": "#636EFA", "Apparel": "#EF553B"},
+        labels={"estimated_elasticity": "Price Elasticity", "product": ""},
         height=350,
     )
+    fig.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font_color="white",
+        legend_title="Category",
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
 with col2:
     st.markdown("**Elasticity Summary Table**")
